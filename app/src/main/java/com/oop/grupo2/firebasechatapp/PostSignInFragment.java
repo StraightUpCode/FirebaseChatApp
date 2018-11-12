@@ -54,6 +54,7 @@ public class PostSignInFragment extends Fragment {
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(getContext(), "Nickname Ingresado Correctamente", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(getContext(), MainActivity.class));
+
                                 }
                             });
                 }

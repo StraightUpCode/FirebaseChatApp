@@ -50,7 +50,7 @@ public class SignInActivity extends AppCompatActivity {
     // [START auth_fui_result]
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
 
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
@@ -58,15 +58,16 @@ public class SignInActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String userId = user.getUid();
                 FirebaseFirestore.getInstance().collection("/user")
-                        .document( user.getUid())
+                        .document(userId )
                         .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                     if(task.isSuccessful()){
                                         DocumentSnapshot doc = task.getResult();
                                         if(doc.exists()){
-                                            Log.d("Sig In Activity", "EL usuario tiene esta data" + doc.getData());
+                                            Log.d("Sig In Activity", "EL usuario tiene esta data" + doc.getData().get("username"));
                                         }else{
                                             getSupportFragmentManager()
                                                     .beginTransaction()
@@ -86,5 +87,6 @@ public class SignInActivity extends AppCompatActivity {
                 // ...
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
