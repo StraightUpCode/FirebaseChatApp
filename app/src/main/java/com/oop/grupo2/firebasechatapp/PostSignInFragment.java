@@ -46,7 +46,7 @@ public class PostSignInFragment extends Fragment {
                     String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                     HashMap<String, Object> data = new HashMap<>();
                     data.put("nickname", nickname);
-                    db.collection("/users")
+                    db.collection("users")
                             .document(currentUserId)
                             .set(data)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
