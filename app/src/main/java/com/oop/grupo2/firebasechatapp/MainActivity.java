@@ -73,15 +73,6 @@ public class MainActivity extends AppCompatActivity implements MessageListener {
                     .document("chat_general")
                     .collection("chat_msg")
                     .orderBy("datetime",Query.Direction.ASCENDING);
-       /* SnapshotParser<Message> parser = new SnapshotParser<Message>() {
-            @NonNull
-            @Override
-            public Message parseSnapshot(@NonNull DocumentSnapshot snapshot) {
-                Message msg = snapshot.toObject(Message.class);
-                return msg;
-
-            }
-        };*/
 
             FirestoreRecyclerOptions<Message> options = new FirestoreRecyclerOptions.Builder<Message>()
                     .setQuery(msgReferences,Message.class)
@@ -128,18 +119,7 @@ public class MainActivity extends AppCompatActivity implements MessageListener {
             submitButton = findViewById(R.id.submit);
             messageText = findViewById(R.id.message);
 
-            submitButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Message msg = new Message(userId, messageText.getText().toString(),Timestamp.now().toDate());
-                    db.collection("chat_publico")
-                            .document("chat_general")
-                            .collection("chat_msg")
-                            .add(msg);
-                    messageText.setText("");
 
-                }
-            });
         }
 
 

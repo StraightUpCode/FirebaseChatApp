@@ -8,15 +8,15 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context=".MainActivity">
-        <android.support.v7.widget.RecyclerView
-        android:id="@+id/messageRecyclerView"
+    >
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/chatRoomRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/linearLayout"/>
+        android:layout_above="@+id/chatroomLinear"/>
 
-        <LinearLayout
-        android:id="@+id/linearLayout"
+    <LinearLayout
+        android:id="@+id/chatroomLinear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -27,7 +27,7 @@
 
 
         <EditText
-            android:id="@+id/message"
+            android:id="@+id/messageEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -36,14 +36,12 @@
             android:inputType="textMultiLine"/>
 
         <Button
-            android:id="@+id/submit"
+            android:id="@+id/submitMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:text="Enviar"/>
 
-        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
-
-
