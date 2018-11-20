@@ -1,10 +1,9 @@
 package com.oop.grupo2.firebasechatapp;
 
-import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
 
@@ -12,23 +11,24 @@ public class Message {
     public String uID;
     public String message;
     public Date datetime;
-    private String username;
+    public String nickname;
     private MessageListener listener;
-    private int posicion;
     public Message(){
 
     }
-    public Message(String uID, String message, Date datetime){
+    public Message(String uID, String message ){
+        this(uID , "" , message);
+    }
+    public Message(String uID, String username, String message){
+        this.nickname = username;
         this.uID = uID;
         this.message = message;
-        this.datetime = datetime;
     }
 
 
-    public Date getDatetime() {
-        return datetime;
-    }
-
+    @ServerTimestamp
+    public Date getDatetime() { return datetime; }
+    public void setDatetime(Date mDatetime) { datetime = mDatetime; }
     public String getMessage() {
         return message != null ? message : "";
     }
@@ -55,14 +55,11 @@ public class Message {
 
     }
     public String returnUsername(){
-        return  this.username;
+        return  this.nickname;
     }
-
+    public String getNickname(){ return this.nickname; }
     public void setUsername(String username) {
-        this.username = username;
-    }
-    public void newPosition(int position){
-        this.posicion = position;
+        this.nickname = username;
     }
     public void addOnUserNameLoaded(MessageListener listener){
         this.listener = listener;
