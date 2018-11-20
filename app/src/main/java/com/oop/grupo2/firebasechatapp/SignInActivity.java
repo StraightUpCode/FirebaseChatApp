@@ -59,9 +59,11 @@ public class SignInActivity extends AppCompatActivity {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 String userId = user.getUid();
-                FirebaseFirestore.getInstance().collection("/user")
+
+                FirebaseFirestore.getInstance().collection("user")
                         .document(userId )
-                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                 @Override
                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                                     if(task.isSuccessful()){
