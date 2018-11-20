@@ -64,4 +64,5 @@ public class Message {
     public void addOnUserNameLoaded(MessageListener listener){
         this.listener = listener;
     }
+    public void setMessage(String content){ this.message = content;}
 }

@@ -21,6 +21,9 @@ public class ChatRoom {
         chat_id = id;
         last_message = msg;
 
+        //Escucha si el documento ha recibido una actualiza AKA si alguien envio un mensaje
+        // Cuando se actualiza la abse de datos, aqui se recepcion y se actualiza el "last_message"
+        // El cual hace un trigger al para que se actualice en la vista
         FirebaseFirestore.getInstance().collection("chat_publico")
                     .document(id)
                     .addSnapshotListener(new EventListener<DocumentSnapshot>() {

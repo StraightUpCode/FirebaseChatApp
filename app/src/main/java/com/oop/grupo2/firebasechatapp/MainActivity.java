@@ -144,6 +144,9 @@ public class MainActivity extends AppCompatActivity implements MessageListener {
                 }
             });
 
+            Intent newIntent = new Intent(MainActivity.this, ChatRoomListActivity.class);
+            startActivity(newIntent);
+            finish();
 
         }
 
