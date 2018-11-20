@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.ServerTimestamp;
 
 
 public class MainActivity extends AppCompatActivity implements MessageListener {
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements MessageListener {
             timestamp = (TextView) v.findViewById(R.id.timestamp);
         }
     }
-    private String userId = "";
+    private User myUser;
     public Button submitButton;
     public  EditText messageText;
     private Query msgReferences;
@@ -59,10 +60,18 @@ public class MainActivity extends AppCompatActivity implements MessageListener {
 
             finish();
         }else{
-
+            submitButton = findViewById(R.id.submit);
+            messageText = findViewById(R.id.message);
+            submitButton.setEnabled(false);
             //AQUI ESTA LA BASE DE DATOS DOG!
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            userId = user.getUid();
+            myUser = new User(user.getUid());
+            myUser.fetchUsername(new FetchUsernameListener() {
+                @Override
+                public void onFetched() {
+                    submitButton.setEnabled(true);
+                }
+            });
             final RecyclerView mRecyclerView = findViewById(R.id.messageRecyclerView);
             final LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mLayoutManager.setStackFromEnd(true);
@@ -72,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements MessageListener {
             Query msgReferences = db.collection("chat_publico")
                     .document("chat_general")
                     .collection("chat_msg")
-                    .orderBy("datetime",Query.Direction.ASCENDING);
+                    .orderBy("datetime",Query.Direction.ASCENDING)
+                    ;
 
             FirestoreRecyclerOptions<Message> options = new FirestoreRecyclerOptions.Builder<Message>()
                     .setQuery(msgReferences,Message.class)
@@ -81,10 +91,15 @@ public class MainActivity extends AppCompatActivity implements MessageListener {
                 @Override
                 protected void onBindViewHolder(@NonNull MessageViewHolder holder, int position, @NonNull Message model) {
                     model.addOnUserNameLoaded(MainActivity.this);
-                    model.fetchUserName();
                     if(model.getMessage() != null) holder.message.setText(model.getMessage());
                     if(model.getDatetime() != null)holder.timestamp.setText(model.getDatetime().toString());
-                    if( model.getuID() != null) holder.nickname.setText(model.returnUsername());
+                    if( model.getNickname() != null && !model.getNickname().equals("")){
+                        holder.nickname.setText(model.getNickname());
+                    } else{
+                        model.fetchUserName();
+                        holder.nickname.setText(model.returnUsername());
+
+                    }
                     holder.nickname.setVisibility(TextView.VISIBLE);
                     holder.timestamp.setVisibility(TextView.VISIBLE);
                     holder.message.setVisibility(TextView.VISIBLE);
@@ -116,8 +131,18 @@ public class MainActivity extends AppCompatActivity implements MessageListener {
             });
             mFirestoreAdapter.notifyDataSetChanged();
             mRecyclerView.setAdapter(mFirestoreAdapter);
-            submitButton = findViewById(R.id.submit);
-            messageText = findViewById(R.id.message);
+            submitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Message msg = new Message(myUser.userId, myUser.userName,messageText.getText().toString());
+                    db.collection("chat_publico")
+                            .document("chat_general")
+                            .collection("chat_msg")
+                            .add(msg);
+                    messageText.setText("");
+
+                }
+            });
 
 
         }
@@ -145,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements MessageListener {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        userId = "";
+                        myUser = null;
                         startActivity(new Intent(MainActivity.this, SignInActivity.class));
                         finish();
                     }

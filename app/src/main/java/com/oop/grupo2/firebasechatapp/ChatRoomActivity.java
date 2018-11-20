@@ -74,7 +74,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Message msg = new Message(userId, messageContent.getText().toString(),Timestamp.now().toDate());
+                Message msg = new Message(userId,"lol", messageContent.getText().toString());
                 db.collection("chat_publico")
                         .document("chat_general")
                         .collection("chat_msg")
