@@ -48,27 +48,34 @@ public class ChatListFragment extends Fragment{
         final ArrayList<ChatRoom> dataset = new ArrayList<ChatRoom>() ;
 
         adapter = new ChatListAdapter(dataset);
-
+        //Se buscan cuales son las salas de chat
         FirebaseFirestore.getInstance()
                 .collection("chat_publico")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        //Se obtienen todas las salas de chat
                         for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
+                            //Se obtiene el ultimo mensaje como un Map
                             Map<String,Object> map = (HashMap)documentSnapshot.getData().get("last_message");
-                            Message msg = new Message();
+                            Message msg = new Message(); // Se crea una instancia de un mensaje
+                            //Se asigna el Nombre del Usuario que lo Mando y El Mensaje como tal
                             msg.setUsername((String) map.get("nickname"));
                             msg.setMessage((String) map.get("message"));
+                            // Se crea un objeto ChatRoom que contiene el "Id" del Chat y el Ultimo mensaje
                             ChatRoom chat_room = new ChatRoom(documentSnapshot.getId(),msg);
+                            // Como este ultimo mensaje puede cambiar tiene un listener actualizar los datos en caso de que se reciba un nuevo mensaje
                             chat_room.addLastMessageUpdater(new UpdateMessage() {
                                 @Override
                                 public void onMessageUpdated() {
                                     adapter.notifyDataSetChanged();
                                 }
                             });
+                            // Se agrega al dataset
                             dataset.add(chat_room);
                         }
+                        //Se le notifica al adapter que se modificaron los cambios
                         adapter.notifyDataSetChanged();
                     }
                 });
