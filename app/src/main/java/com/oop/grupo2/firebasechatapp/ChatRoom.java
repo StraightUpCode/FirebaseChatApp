@@ -31,12 +31,16 @@ public class ChatRoom {
                         public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
 
                             if (e != null) {
-                                return;
+                                return ;
                             }
 
                             if (documentSnapshot != null && documentSnapshot.exists()) {
-                               last_message =  documentSnapshot.toObject(Message.class);
-                               listener.onMessageUpdated();
+                                Message newMessage = documentSnapshot.toObject(Message.class);
+                                if(newMessage.notNull()){
+                                    last_message = newMessage;
+                                    listener.onMessageUpdated();
+                                }
+
 
                             }
                         }

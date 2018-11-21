@@ -43,8 +43,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     private String chatRoomName;
     private String tipoChat;
-    private String userId;
-    private FirebaseUser user;
+    private User myUser;
     private Button submitButton;
     private EditText messageContent;
     private RecyclerView messageRecyclerView;
@@ -60,23 +59,35 @@ public class ChatRoomActivity extends AppCompatActivity {
         Bundle arg = getIntent().getExtras();
         chatRoomName = arg.getString("CHAT_ROOM_NAME");
         tipoChat = arg.getString("TIPO_CHAT");
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        userId = user.getUid();
         submitButton = findViewById(R.id.submit);
+        submitButton.setEnabled(false);
         messageContent = findViewById(R.id.messageEditText);
         messageRecyclerView = findViewById(R.id.chatRoomRecycler);
-        user = FirebaseAuth.getInstance().getCurrentUser();
         db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        myUser = new User(user.getUid());
+        myUser.fetchUsername(new FetchUsernameListener() {
+            @Override
+            public void onFetched() {
+                submitButton.setEnabled(true);
+            }
+        });
+
         //Hace el Setup para el Recycler View
         setUpRecyclerView();
         //Envio de Mensajes
-        //TODO Agregar El Nombre del Usuario al Mensaje que se envia todavia no se como :v
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Message msg = new Message(userId,"lol", messageContent.getText().toString());
+               /* Message msg = new Message(userId,"lol", messageContent.getText().toString());
                 db.collection("chat_publico")
                         .document("chat_general")
+                        .collection("chat_msg")
+                        .add(msg);
+                messageContent.setText("");*/
+                Message msg = new Message(myUser.userId, myUser.userName,messageContent.getText().toString());
+                db.collection(tipoChat)
+                        .document(chatRoomName)
                         .collection("chat_msg")
                         .add(msg);
                 messageContent.setText("");
@@ -97,7 +108,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         mLayoutManager.setStackFromEnd(true);
         messageRecyclerView.setLayoutManager(mLayoutManager);
 
-        Query query = this.db.collection("chat_"+tipoChat)
+        Query query = this.db.collection(tipoChat)
                 .document(chatRoomName)
                 .collection("chat_msg")
                 .orderBy("datetime",Query.Direction.ASCENDING);

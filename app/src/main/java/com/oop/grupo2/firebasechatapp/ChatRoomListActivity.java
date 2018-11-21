@@ -22,6 +22,5 @@ public class ChatRoomListActivity extends AppCompatActivity {
         viewPager.setAdapter(tabManager);
         tabLayout.setupWithViewPager(viewPager);
 
-
     }
 }

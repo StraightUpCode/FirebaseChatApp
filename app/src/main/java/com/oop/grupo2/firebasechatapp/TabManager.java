@@ -1,5 +1,6 @@
 package com.oop.grupo2.firebasechatapp;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,7 +15,31 @@ public class TabManager extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        return new ChatListFragment();
+        Fragment fragment;
+        switch (i){
+            case 0:{
+                fragment = new ChatListFragment();
+                Bundle args = new Bundle();
+                args.putString(ChatListFragment.TIPO_DE_CHAT,"chat_publico");
+                fragment.setArguments(args);
+                break;
+            }
+            case 1: {
+                fragment = new ChatListFragment();
+                Bundle args = new Bundle();
+                args.putString(ChatListFragment.TIPO_DE_CHAT,"chat_privado");
+                fragment.setArguments(args);
+                break;
+            }
+            default:{
+                fragment = new ChatListFragment();
+                Bundle args = new Bundle();
+                args.putString(ChatListFragment.TIPO_DE_CHAT,"chat_privado");
+                fragment.setArguments(args);
+                break;
+            }
+        }
+        return fragment;
     }
 
     @Override
