@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -48,7 +49,7 @@ public class ChatListFragment extends Fragment{
         RecyclerView recyclerView = view.findViewById(R.id.chatList);
         final ArrayList<ChatRoom> dataset = new ArrayList<ChatRoom>() ;
         Bundle args = getArguments();
-        String tipoChat = args.getString(TIPO_DE_CHAT);
+        final String tipoChat = args.getString(TIPO_DE_CHAT);
 
         adapter = new ChatListAdapter(dataset);
         //Se buscan cuales son las salas de chat
@@ -68,7 +69,7 @@ public class ChatListFragment extends Fragment{
                                msg.setUsername((String) map.get("nickname"));
                                msg.setMessage((String) map.get("message"));
                                // Se crea un objeto ChatRoom que contiene el "Id" del Chat y el Ultimo mensaje
-                               ChatRoom chat_room = new ChatRoom(documentSnapshot.getId(),msg);
+                               ChatRoom chat_room = new ChatRoom(documentSnapshot.getId(),tipoChat,msg);
                                // Como este ultimo mensaje puede cambiar tiene un listener actualizar los datos en caso de que se reciba un nuevo mensaje
                                chat_room.addLastMessageUpdater(new UpdateMessage() {
                                    @Override
@@ -87,8 +88,8 @@ public class ChatListFragment extends Fragment{
 
        }
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext() , 1));
 
     }
 

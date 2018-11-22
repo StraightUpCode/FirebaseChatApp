@@ -1,5 +1,6 @@
 package com.oop.grupo2.firebasechatapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -7,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -40,6 +42,8 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     // Inicio de la Clase ChatRoomFragment
+    public static String CHAT_ROOM_NAME = "CHAT_ROOM_NAME";
+    public static String TIPO_CHAT_ROOM = "TIPO_CHAT";
 
     private String chatRoomName;
     private String tipoChat;
@@ -47,19 +51,19 @@ public class ChatRoomActivity extends AppCompatActivity {
     private Button submitButton;
     private EditText messageContent;
     private RecyclerView messageRecyclerView;
-    private FirebaseFirestore db ;
-    private FirestoreRecyclerAdapter<Message , MessageViewHolder > FirestoreRecycler ;
+    private FirebaseFirestore db;
+    private FirestoreRecyclerAdapter<Message, MessageViewHolder> FirestoreRecycler;
 
     // Cuando se crea la actividad
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_room_layout);
         Bundle arg = getIntent().getExtras();
-        chatRoomName = arg.getString("CHAT_ROOM_NAME");
-        tipoChat = arg.getString("TIPO_CHAT");
-        submitButton = findViewById(R.id.submit);
+        chatRoomName = arg.getString(CHAT_ROOM_NAME);
+        tipoChat = arg.getString(TIPO_CHAT_ROOM);
+        submitButton = findViewById(R.id.submitMessage);
         submitButton.setEnabled(false);
         messageContent = findViewById(R.id.messageEditText);
         messageRecyclerView = findViewById(R.id.chatRoomRecycler);
@@ -74,36 +78,6 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
 
         //Hace el Setup para el Recycler View
-        setUpRecyclerView();
-        //Envio de Mensajes
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               /* Message msg = new Message(userId,"lol", messageContent.getText().toString());
-                db.collection("chat_publico")
-                        .document("chat_general")
-                        .collection("chat_msg")
-                        .add(msg);
-                messageContent.setText("");*/
-                Message msg = new Message(myUser.userId, myUser.userName,messageContent.getText().toString());
-                db.collection(tipoChat)
-                        .document(chatRoomName)
-                        .collection("chat_msg")
-                        .add(msg);
-                messageContent.setText("");
-
-            }
-        });
-    }
-
-    /*
-    Una ves construida la vista, se procepe a capturar los elementos de la vista
-    para agregar los Event Listeners
-    y el Set Up para el Recycler View donde se veran los mensajes recibidos y enviados
-     */
-
-
-    public void setUpRecyclerView(){
         final LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mLayoutManager.setStackFromEnd(true);
         messageRecyclerView.setLayoutManager(mLayoutManager);
@@ -111,26 +85,29 @@ public class ChatRoomActivity extends AppCompatActivity {
         Query query = this.db.collection(tipoChat)
                 .document(chatRoomName)
                 .collection("chat_msg")
-                .orderBy("datetime",Query.Direction.ASCENDING);
+                .orderBy("datetime", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<Message> options = new FirestoreRecyclerOptions.Builder<Message>()
-                .setQuery(query,Message.class)
+                .setQuery(query, Message.class)
                 .build();
-        FirestoreRecycler = new FirestoreRecyclerAdapter<Message, MessageViewHolder>(options){
+        FirestoreRecycler = new FirestoreRecyclerAdapter<Message, MessageViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ChatRoomActivity.MessageViewHolder holder, int position, @NonNull Message model) {
-                if(model.getMessage() != null) holder.message.setText(model.getMessage());
-                if(model.getDatetime() != null)holder.timestamp.setText(model.getDatetime().toString());
-                if( model.getuID() != null) holder.nickname.setText(model.returnUsername());
+                if (model.getMessage() != null) holder.message.setText(model.getMessage());
+                if (model.getDatetime() != null)
+                    holder.timestamp.setText(model.getDatetime().toString());
+                if (model.getuID() != null) holder.nickname.setText(model.returnUsername());
                 holder.nickname.setVisibility(TextView.VISIBLE);
                 holder.timestamp.setVisibility(TextView.VISIBLE);
                 holder.message.setVisibility(TextView.VISIBLE);
+
+
             }
 
             @NonNull
             @Override
             public ChatRoomActivity.MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.messate_item,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.messate_item, parent, false);
                 return new ChatRoomActivity.MessageViewHolder(view);
             }
         };
@@ -155,10 +132,21 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
 
         FirestoreRecycler.notifyDataSetChanged();
+        FirestoreRecycler.startListening();
         messageRecyclerView.setAdapter(FirestoreRecycler);
+        messageRecyclerView.addItemDecoration(new DividerItemDecoration(messageRecyclerView.getContext() , 1));
+        //Envio de Mensajes
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Message msg = new Message(myUser.userId, myUser.userName, messageContent.getText().toString());
+                db.collection(tipoChat)
+                        .document(chatRoomName)
+                        .collection("chat_msg")
+                        .add(msg);
+                messageContent.setText("");
 
-
+            }
+        });
     }
-
-
 }

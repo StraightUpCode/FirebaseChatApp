@@ -1,5 +1,7 @@
 package com.oop.grupo2.firebasechatapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -43,10 +45,20 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatRo
     @Override
     public void onBindViewHolder(@NonNull ChatRoomHolder holder, int position) {
         // Se agregan los textos (El nombre de la Sala de Chat) y El ultimo mensaje a la vista
-        ChatRoom room = dataset.get(position);
+        final Context context = holder.itemView.getContext();
+        final ChatRoom room = dataset.get(position);
         holder.title.setText(room.getChat_id());
         String msg = room.getLast_message().getNickname()+": " + room.getLast_message().getMessage();
         holder.lastMsg.setText(msg);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ChatRoomIntent = new Intent(context , ChatRoomActivity.class );
+                ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_NAME ,room.getChat_id() );
+                ChatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, room.getTipo_chat());
+                context.startActivity(ChatRoomIntent);
+            }
+        });
 
     }
 }

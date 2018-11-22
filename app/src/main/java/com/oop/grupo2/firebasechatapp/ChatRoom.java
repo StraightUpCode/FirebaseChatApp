@@ -6,20 +6,24 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.HashMap;
+
 import javax.annotation.Nullable;
 
 public class ChatRoom {
     private String chat_id;
     private Message last_message;
     private UpdateMessage listener;
+    private String tipo_chat;
 
     ChatRoom(){
 
     }
 
-    public ChatRoom(String id, Message msg) {
+    public ChatRoom(String id, String tipoChat,Message msg) {
         chat_id = id;
         last_message = msg;
+        tipo_chat = tipoChat;
 
         //Escucha si el documento ha recibido una actualiza AKA si alguien envio un mensaje
         // Cuando se actualiza la abse de datos, aqui se recepcion y se actualiza el "last_message"
@@ -35,7 +39,10 @@ public class ChatRoom {
                             }
 
                             if (documentSnapshot != null && documentSnapshot.exists()) {
-                                Message newMessage = documentSnapshot.toObject(Message.class);
+                                Message newMessage = new Message();
+                                HashMap<String, Object> content = (HashMap<String, Object>) documentSnapshot.getData().get("last_message");
+                                newMessage.setMessage(content.get("message").toString());
+                                newMessage.setUsername(content.get("nickname").toString());
                                 if(newMessage.notNull()){
                                     last_message = newMessage;
                                     listener.onMessageUpdated();
@@ -61,6 +68,10 @@ public class ChatRoom {
 
     public String getChat_id() {
         return chat_id;
+    }
+
+    public String getTipo_chat() {
+        return tipo_chat;
     }
 
     public void addLastMessageUpdater(UpdateMessage listener){
