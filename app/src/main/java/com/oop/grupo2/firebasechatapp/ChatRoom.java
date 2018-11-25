@@ -46,6 +46,7 @@ public class ChatRoom {
                                 if(newMessage.notNull()){
                                     last_message = newMessage;
                                     listener.onMessageUpdated();
+                                    //Comentario solo por que si
                                 }
 
 
