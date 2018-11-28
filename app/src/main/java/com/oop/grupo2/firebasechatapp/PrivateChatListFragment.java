@@ -60,4 +60,6 @@ public class PrivateChatListFragment extends Fragment {
             }
         });
     }
+
+
 }

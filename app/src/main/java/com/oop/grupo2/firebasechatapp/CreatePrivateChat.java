@@ -1,0 +1,86 @@
+package com.oop.grupo2.firebasechatapp;
+
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class CreatePrivateChat extends Fragment {
+
+    private EditText nombre;
+    private Button submit;
+    public CreatePrivateChat() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_create_private_chat, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        submit = view.findViewById(R.id.chatCreate);
+        nombre = view.findViewById(R.id.chatNameInput);
+        final View _view = view;
+
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String chatName = nombre.getText().toString();
+                HashMap<String,Object> data = new HashMap<>();
+                data.put("chatName",chatName);
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference ref = db
+                        .collection("chat_privado")
+                        .document();
+                ref.set(data);
+                HashMap<String,Object> userChat = new HashMap<>();
+                userChat.put("chatId",ref.getId());
+                db.collection("users")
+                        .document(user.getUid())
+                        .collection("chats_privados")
+                        .add(userChat);
+                android.content.ClipboardManager cm = (android.content.ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                android.content.ClipData clip =  android.content.ClipData
+                        .newPlainText("Chat Id", ref.getId());
+                cm.setPrimaryClip(clip);
+
+
+                Intent chatRoomIntent = new Intent(getContext(),ChatRoomActivity.class);
+                chatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
+                        .putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
+                        .putExtra(ChatRoomActivity.CHAT_ROOM_NAME, ref.getId());
+
+                startActivity(chatRoomIntent);
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+
+
+    }
+}
