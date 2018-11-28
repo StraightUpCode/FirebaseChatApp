@@ -19,7 +19,7 @@ import android.view.ViewGroup;
  */
 public class PopNewPrivateChat extends Fragment {
 
-
+    public FragmentPoper listener;
     public PopNewPrivateChat() {
         // Required empty public constructor
     }
@@ -41,7 +41,19 @@ public class PopNewPrivateChat extends Fragment {
         viewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int i) {
-                return i == 0 ? new CreatePrivateChat() : new JoinChatFragment();
+
+                Fragment fragment ;
+                if( i == 0){
+                    CreatePrivateChat newFragment = new CreatePrivateChat();
+                    newFragment.setFragmentPopperListener(listener);
+                    fragment = newFragment;
+                }else{
+                    JoinChatFragment newFragment = new JoinChatFragment();
+                    newFragment.setFragmentPopperListener(listener);
+                    fragment = newFragment;
+                }
+
+                return fragment;
             }
 
             @Override
@@ -56,5 +68,9 @@ public class PopNewPrivateChat extends Fragment {
             }
         });
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    public void setupPop (FragmentPoper poper){
+        listener = poper;
     }
 }

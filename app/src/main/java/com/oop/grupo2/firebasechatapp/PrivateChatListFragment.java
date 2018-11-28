@@ -47,8 +47,16 @@ public class PrivateChatListFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
+                Fragment fragment = new PopNewPrivateChat();
+                ((PopNewPrivateChat) fragment).setupPop(new FragmentPoper() {
+                    @Override
+                    public void PopFragment() {
+                        myFragmentManager.popBackStackImmediate();
+                    }
+                });
                 myFragmentManager.beginTransaction()
-                        .add(R.id.frame_holder, new PopNewPrivateChat(),"popup")
+                        .add(R.id.frame_holder, fragment,"popup")
                         .addToBackStack(null)
                         .commit();
             }

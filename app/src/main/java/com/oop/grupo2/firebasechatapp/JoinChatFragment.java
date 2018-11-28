@@ -29,6 +29,7 @@ public class JoinChatFragment extends Fragment {
 
     Button joinButton ;
     EditText chatRoomId;
+    FragmentPoper listener;
     public JoinChatFragment() {
         // Required empty public constructor
     }
@@ -76,8 +77,7 @@ public class JoinChatFragment extends Fragment {
 
                                 startActivity(chatRoomIntent);
 
-                                getActivity().getSupportFragmentManager()
-                                        .popBackStackImmediate();
+                                listener.PopFragment();
 
 
                             }
@@ -86,5 +86,8 @@ public class JoinChatFragment extends Fragment {
 
             }
         });
+    }
+    public void setFragmentPopperListener(FragmentPoper popper){
+        listener = popper;
     }
 }

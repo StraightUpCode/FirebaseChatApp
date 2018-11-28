@@ -28,6 +28,8 @@ public class CreatePrivateChat extends Fragment {
 
     private EditText nombre;
     private Button submit;
+
+    public FragmentPoper listener;
     public CreatePrivateChat() {
         // Required empty public constructor
     }
@@ -87,10 +89,14 @@ public class CreatePrivateChat extends Fragment {
                         .putExtra(ChatRoomActivity.CHAT_ROOM_NAME, ref.getId());
 
                 startActivity(chatRoomIntent);
-                getActivity().getSupportFragmentManager().popBackStack();
+                listener.PopFragment();
             }
         });
 
 
+    }
+
+    public void setFragmentPopperListener(FragmentPoper popper){
+        listener = popper;
     }
 }

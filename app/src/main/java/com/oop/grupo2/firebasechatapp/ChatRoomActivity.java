@@ -12,6 +12,9 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -156,5 +159,29 @@ public class ChatRoomActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(tipoChat.equals("chat_privado")){
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.chat_room_menu, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            default: {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT , "Copia el Siguiente Valor para unirte a mi Chat Privado en FirebaseChatApp : "+ chatRoomName);
+                shareIntent.putExtra(Intent.EXTRA_TITLE,"Chat Invite");
+                shareIntent.setType("text/plain");
+                startActivity(Intent.createChooser(shareIntent, "Invitar con: "));
+
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
