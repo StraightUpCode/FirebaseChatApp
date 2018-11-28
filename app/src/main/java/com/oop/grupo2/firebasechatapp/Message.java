@@ -66,6 +66,6 @@ public class Message {
     }
     public void setMessage(String content){ this.message = content;}
     public boolean notNull(){
-        return  ! (message== null) && !(nickname == null);
+        return  ! (message== null && nickname == null);
     }
 }
