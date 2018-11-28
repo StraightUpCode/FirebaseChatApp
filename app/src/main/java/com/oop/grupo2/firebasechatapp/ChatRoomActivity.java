@@ -20,9 +20,11 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -44,9 +46,11 @@ public class ChatRoomActivity extends AppCompatActivity {
     // Inicio de la Clase ChatRoomFragment
     public static String CHAT_ROOM_NAME = "CHAT_ROOM_NAME";
     public static String TIPO_CHAT_ROOM = "TIPO_CHAT";
+    public static String NOMBRE_DEL_CHAT = "NOMBRE_DEL_CHAT";
 
     private String chatRoomName;
     private String tipoChat;
+    private String nombreChat;
     private User myUser;
     private Button submitButton;
     private EditText messageContent;
@@ -60,9 +64,13 @@ public class ChatRoomActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_room_layout);
+
         Bundle arg = getIntent().getExtras();
         chatRoomName = arg.getString(CHAT_ROOM_NAME);
         tipoChat = arg.getString(TIPO_CHAT_ROOM);
+        nombreChat =  arg.getString(NOMBRE_DEL_CHAT);
+        if(nombreChat != null)  getSupportActionBar()
+                                        .setTitle(nombreChat);
         submitButton = findViewById(R.id.submitMessage);
         submitButton.setEnabled(false);
         messageContent = findViewById(R.id.messageEditText);
