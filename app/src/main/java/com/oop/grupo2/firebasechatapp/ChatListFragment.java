@@ -66,10 +66,12 @@ public class ChatListFragment extends Fragment{
                                Map<String,Object> map = (HashMap)documentSnapshot.getData().get("last_message");
                                Message msg = new Message(); // Se crea una instancia de un mensaje
                                //Se asigna el Nombre del Usuario que lo Mando y El Mensaje como tal
-                               msg.setUsername((String) map.get("nickname"));
-                               msg.setMessage((String) map.get("message"));
+                               if(map != null){
+                                   msg.setUsername((String) map.get("nickname"));
+                                   msg.setMessage((String) map.get("message"));
+                               }
                                // Se crea un objeto ChatRoom que contiene el "Id" del Chat y el Ultimo mensaje
-                               ChatRoom chat_room = new ChatRoom(documentSnapshot.getId(),tipoChat,msg);
+                               ChatRoom chat_room = new ChatRoom(documentSnapshot.getId(),documentSnapshot.getData().get("chatName").toString(),tipoChat,msg);
                                // Como este ultimo mensaje puede cambiar tiene un listener actualizar los datos en caso de que se reciba un nuevo mensaje
                                chat_room.addLastMessageUpdater(new UpdateMessage() {
                                    @Override
