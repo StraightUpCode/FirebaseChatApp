@@ -25,10 +25,7 @@ public class TabManager extends FragmentPagerAdapter {
                 break;
             }
             case 1: {
-                fragment = new ChatListFragment();
-                Bundle args = new Bundle();
-                args.putString(ChatListFragment.TIPO_DE_CHAT,"chat_privado");
-                fragment.setArguments(args);
+                fragment = new PrivateChatListFragment();
                 break;
             }
             default:{
