@@ -55,7 +55,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatRo
             @Override
             public void onClick(View v) {
                 Intent ChatRoomIntent = new Intent(context , ChatRoomActivity.class );
-                ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_NAME ,room.getChatName() );
+                ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_NAME ,room.getChat_id() );
                 ChatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, room.getTipo_chat());
                 ChatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, room.getChatName());
                 context.startActivity(ChatRoomIntent);
