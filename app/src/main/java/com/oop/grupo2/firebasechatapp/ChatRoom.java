@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 
 public class ChatRoom {
     private String chat_id;
+    private String chatName;
     private Message last_message;
     private UpdateMessage listener;
     private String tipo_chat;
@@ -20,8 +21,9 @@ public class ChatRoom {
 
     }
 
-    public ChatRoom(String id, String tipoChat,Message msg) {
+    public ChatRoom(String id, String chat_name,String tipoChat,Message msg) {
         chat_id = id;
+        chatName = chat_name;
         last_message = msg;
         tipo_chat = tipoChat;
 
@@ -41,12 +43,12 @@ public class ChatRoom {
                             if (documentSnapshot != null && documentSnapshot.exists()) {
                                 Message newMessage = new Message();
                                 HashMap<String, Object> content = (HashMap<String, Object>) documentSnapshot.getData().get("last_message");
+                                if(content == null ) return;
                                 newMessage.setMessage(content.get("message").toString());
                                 newMessage.setUsername(content.get("nickname").toString());
                                 if(newMessage.notNull()){
                                     last_message = newMessage;
                                     listener.onMessageUpdated();
-                                    //Comentario solo por que si
                                 }
 
 
@@ -73,6 +75,10 @@ public class ChatRoom {
 
     public String getTipo_chat() {
         return tipo_chat;
+    }
+
+    public String getChatName() {
+        return chatName;
     }
 
     public void addLastMessageUpdater(UpdateMessage listener){

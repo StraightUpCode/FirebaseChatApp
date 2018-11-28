@@ -47,14 +47,15 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatRo
         // Se agregan los textos (El nombre de la Sala de Chat) y El ultimo mensaje a la vista
         final Context context = holder.itemView.getContext();
         final ChatRoom room = dataset.get(position);
-        holder.title.setText(room.getChat_id());
-        String msg = room.getLast_message().getNickname()+": " + room.getLast_message().getMessage();
+        holder.title.setText(room.getChatName());
+        String msg = room.getLast_message().notNull()? room.getLast_message().getNickname()+": " + room.getLast_message().getMessage() : "Nuevo Chat" ;
         holder.lastMsg.setText(msg);
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent ChatRoomIntent = new Intent(context , ChatRoomActivity.class );
-                ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_NAME ,room.getChat_id() );
+                ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_NAME ,room.getChatName() );
                 ChatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, room.getTipo_chat());
                 context.startActivity(ChatRoomIntent);
             }
