@@ -36,7 +36,7 @@ public class PrivateChatListFragment extends Fragment {
         myFragmentManager = this.getChildFragmentManager();
          ChatListFragment chatList = new ChatListFragment();
         Bundle args = new Bundle();
-        args.putString(ChatListFragment.TIPO_DE_CHAT,"chat_publico");
+        args.putString(ChatListFragment.TIPO_DE_CHAT,"chat_privado");
         chatList.setArguments(args);
         myFragmentManager.beginTransaction()
                 .add(R.id.frame_holder,chatList,"Chat List Fragment")

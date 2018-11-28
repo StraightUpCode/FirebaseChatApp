@@ -41,7 +41,7 @@ public class PopNewPrivateChat extends Fragment {
         viewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public Fragment getItem(int i) {
-                return new CreatePrivateChat();
+                return i == 0 ? new CreatePrivateChat() : new JoinChatFragment();
             }
 
             @Override
