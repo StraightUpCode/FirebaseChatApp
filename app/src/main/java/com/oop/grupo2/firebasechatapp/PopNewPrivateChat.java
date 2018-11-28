@@ -52,7 +52,7 @@ public class PopNewPrivateChat extends Fragment {
             @Nullable
             @Override
             public CharSequence getPageTitle(int position) {
-                return position == 1 ? "Crear Chat" : "Entrar";
+                return position == 0 ? "Crear Chat" : "Entrar";
             }
         });
         tabLayout.setupWithViewPager(viewPager);
