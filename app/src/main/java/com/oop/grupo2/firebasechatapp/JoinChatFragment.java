@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -56,43 +57,44 @@ public class JoinChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final String id = chatRoomId.getText().toString().trim();
-                if(id.isEmpty()){
-                    chatRoomId.setText("");
-                    errorMsg.setVisibility(View.VISIBLE);
+                if(errorMsg.getVisibility() == View.VISIBLE) errorMsg.setVisibility(View.GONE);
+                final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                final HashMap<String, Object> data = new HashMap<>();
+                data.put("chatId", id);
 
-                }else{
-                    if(errorMsg.getVisibility() == View.VISIBLE) errorMsg.setVisibility(View.GONE);
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    HashMap<String, Object> data = new HashMap<>();
-                    data.put("chatId", id);
-                    db.collection("users")
-                            .document(user.getUid())
-                            .collection("chats_privados")
-                            .add(data);
+                db.collection("chat_privado")
+                        .document(id)
+                        .get()
+                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                db.collection("users")
+                                        .document(user.getUid())
+                                        .collection("chats_privados")
+                                        .add(data);
 
-                    db.collection("chat_privado")
-                            .document(id)
-                            .get()
-                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    Map<String, Object> chatData = documentSnapshot.getData();
-                                    String chatName = chatData.get("chatName").toString();
-                                    Intent chatRoomIntent = new Intent(getActivity().getApplicationContext() , ChatRoomActivity.class );
-                                    chatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
-                                            .putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
-                                            .putExtra(ChatRoomActivity.CHAT_ROOM_NAME,id);
+                                Map<String, Object> chatData = documentSnapshot.getData();
+                                String chatName = chatData.get("chatName").toString();
+                                Intent chatRoomIntent = new Intent(getActivity().getApplicationContext() , ChatRoomActivity.class );
+                                chatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
+                                        .putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
+                                        .putExtra(ChatRoomActivity.CHAT_ROOM_NAME,id);
 
-                                    startActivity(chatRoomIntent);
+                                startActivity(chatRoomIntent);
 
-                                    listener.PopFragment();
+                                listener.PopFragment();
 
 
-                                }
-                            });
-
-                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                chatRoomId.setText("");
+                                errorMsg.setVisibility(View.VISIBLE);
+                            }
+                        });
 
 
             }
