@@ -150,13 +150,15 @@ public class ChatRoomActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Message msg = new Message(myUser.userId, myUser.userName, messageContent.getText().toString());
-                db.collection(tipoChat)
-                        .document(chatRoomName)
-                        .collection("chat_msg")
-                        .add(msg);
-                messageContent.setText("");
-
+                String msg_message =  messageContent.getText().toString().trim();
+                if(! msg_message.isEmpty()){
+                    Message msg = new Message(myUser.userId, myUser.userName, msg_message);
+                    db.collection(tipoChat)
+                            .document(chatRoomName)
+                            .collection("chat_msg")
+                            .add(msg);
+                    messageContent.setText("");
+                }
             }
         });
     }

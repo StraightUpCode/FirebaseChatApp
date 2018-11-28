@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +30,7 @@ public class JoinChatFragment extends Fragment {
 
     Button joinButton ;
     EditText chatRoomId;
+    TextView errorMsg;
     FragmentPoper listener;
     public JoinChatFragment() {
         // Required empty public constructor
@@ -47,41 +49,50 @@ public class JoinChatFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         chatRoomId = view.findViewById(R.id.joinId);
         joinButton = view.findViewById(R.id.joinButton);
+        errorMsg = view.findViewById(R.id.join_error);
 
 
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String id = chatRoomId.getText().toString();
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                HashMap<String, Object> data = new HashMap<>();
-                data.put("chatId", id);
-                db.collection("users")
-                        .document(user.getUid())
-                        .collection("chats_privados")
-                        .add(data);
+                final String id = chatRoomId.getText().toString().trim();
+                if(id.isEmpty()){
+                    chatRoomId.setText("");
+                    errorMsg.setVisibility(View.VISIBLE);
 
-                db.collection("chat_privado")
-                        .document(id)
-                        .get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                Map<String, Object> chatData = documentSnapshot.getData();
-                                String chatName = chatData.get("chatName").toString();
-                                Intent chatRoomIntent = new Intent(getActivity().getApplicationContext() , ChatRoomActivity.class );
-                                chatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
-                                        .putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
-                                        .putExtra(ChatRoomActivity.CHAT_ROOM_NAME,id);
+                }else{
+                    if(errorMsg.getVisibility() == View.VISIBLE) errorMsg.setVisibility(View.GONE);
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    HashMap<String, Object> data = new HashMap<>();
+                    data.put("chatId", id);
+                    db.collection("users")
+                            .document(user.getUid())
+                            .collection("chats_privados")
+                            .add(data);
 
-                                startActivity(chatRoomIntent);
+                    db.collection("chat_privado")
+                            .document(id)
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Map<String, Object> chatData = documentSnapshot.getData();
+                                    String chatName = chatData.get("chatName").toString();
+                                    Intent chatRoomIntent = new Intent(getActivity().getApplicationContext() , ChatRoomActivity.class );
+                                    chatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
+                                            .putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
+                                            .putExtra(ChatRoomActivity.CHAT_ROOM_NAME,id);
 
-                                listener.PopFragment();
+                                    startActivity(chatRoomIntent);
+
+                                    listener.PopFragment();
 
 
-                            }
-                        });
+                                }
+                            });
+
+                }
 
 
             }

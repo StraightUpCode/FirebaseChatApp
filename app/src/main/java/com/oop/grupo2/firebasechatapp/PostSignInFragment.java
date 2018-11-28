@@ -26,7 +26,7 @@ import java.util.HashMap;
 public class PostSignInFragment extends Fragment {
     EditText nicknameField;
     FirebaseFirestore db;
-
+    FragmentPoper listener;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,6 +54,7 @@ public class PostSignInFragment extends Fragment {
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(getContext(), "Nickname Ingresado Correctamente", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(getContext(), MainActivity.class));
+                                    listener.PopFragment();
 
                                 }
                             });
@@ -63,5 +64,9 @@ public class PostSignInFragment extends Fragment {
             }
         });
 
+    }
+
+    public void setListener(FragmentPoper listener) {
+        this.listener = listener;
     }
 }

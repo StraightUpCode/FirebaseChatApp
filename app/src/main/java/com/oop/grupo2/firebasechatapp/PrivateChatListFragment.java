@@ -39,7 +39,7 @@ public class PrivateChatListFragment extends Fragment {
         args.putString(ChatListFragment.TIPO_DE_CHAT,"chat_privado");
         chatList.setArguments(args);
         myFragmentManager.beginTransaction()
-                .add(R.id.frame_holder,chatList,"Chat List Fragment")
+                .replace(R.id.frame_holder, chatList, "Chat list Fragment")
                 .commit();
 
 

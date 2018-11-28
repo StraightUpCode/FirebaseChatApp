@@ -37,4 +37,6 @@
         app:layout_constraintBottom_toTopOf="@+id/nickname_id"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- TODO: AGREGAR UN BOTON PARA HACER SUBMIT -->
 </android.support.constraint.ConstraintLayout>

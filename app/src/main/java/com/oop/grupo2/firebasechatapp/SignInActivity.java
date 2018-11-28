@@ -69,11 +69,20 @@ public class SignInActivity extends AppCompatActivity {
                                     if(task.isSuccessful()){
                                         DocumentSnapshot doc = task.getResult();
                                         if(doc.exists()){
-                                            Log.d("Sig In Activity", "EL usuario tiene esta data" + doc.getData().get("username"));
+                                            Log.d("Sign In Activity", "EL usuario tiene esta data" + doc.getData().get("username"));
                                         }else{
+                                            PostSignInFragment signInFragment = new PostSignInFragment();
+                                            signInFragment.setListener(new FragmentPoper() {
+                                                @Override
+                                                public void PopFragment() {
+                                                    getSupportFragmentManager()
+                                                            .popBackStack();
+                                                }
+                                            });
                                             getSupportFragmentManager()
                                                     .beginTransaction()
-                                                    .replace(R.id.fragment_layout, new PostSignInFragment())
+                                                    .replace(R.id.fragment_layout,signInFragment)
+                                                    .addToBackStack(null)
                                                     .commit();
                                         }
 
