@@ -1,16 +1,19 @@
 package com.oop.grupo2.firebasechatapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +33,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.net.URI;
 
 public class ChatRoomActivity extends AppCompatActivity {
     // Constructor de la Vista de los Mensajes
@@ -67,13 +72,26 @@ public class ChatRoomActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_room_layout);
+        Uri uri = getIntent().getData();
+        if(uri != null ){
+            Log.d("URI",uri.toString());
+            chatRoomName = Uri.decode(uri.getQueryParameter("chat"));
+            Log.d("ChatRoomName" , chatRoomName);
+            tipoChat="chat_privado";
+            nombreChat = uri.getQueryParameter("id");
+            Log.d("Nombre " , nombreChat);
 
-        Bundle arg = getIntent().getExtras();
-        chatRoomName = arg.getString(CHAT_ROOM_NAME);
-        tipoChat = arg.getString(TIPO_CHAT_ROOM);
-        nombreChat =  arg.getString(NOMBRE_DEL_CHAT);
-        if(nombreChat != null)  getSupportActionBar()
-                                        .setTitle(nombreChat);
+        }else{
+            Bundle arg = getIntent().getExtras();
+            chatRoomName = arg.getString(CHAT_ROOM_NAME);
+            tipoChat = arg.getString(TIPO_CHAT_ROOM);
+            nombreChat =  arg.getString(NOMBRE_DEL_CHAT);
+        }
+
+        ActionBar actionBar = getSupportActionBar();
+        if(nombreChat != null) actionBar.setTitle(nombreChat);
+
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         submitButton = findViewById(R.id.submitMessage);
         submitButton.setEnabled(false);
         messageContent = findViewById(R.id.messageEditText);

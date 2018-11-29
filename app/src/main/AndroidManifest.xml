@@ -19,7 +19,19 @@
         </activity>
         <activity android:name=".SignInActivity" />
         <activity android:name=".ChatRoomListActivity"></activity>
-        <activity android:name=".ChatRoomActivity"></activity>
+        <activity android:name=".ChatRoomActivity"
+            android:parentActivityName=".ChatRoomListActivity">
+            <meta-data  android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChatRoomListActivity"></meta-data>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="example"
+                    android:host="gizmos" >
+                </data>
+            </intent-filter>
+        </activity>
 
     </application>
 

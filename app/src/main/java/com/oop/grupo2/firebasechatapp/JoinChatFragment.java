@@ -58,43 +58,50 @@ public class JoinChatFragment extends Fragment {
             public void onClick(View v) {
                 final String id = chatRoomId.getText().toString().trim();
                 if(errorMsg.getVisibility() == View.VISIBLE) errorMsg.setVisibility(View.GONE);
-                final FirebaseFirestore db = FirebaseFirestore.getInstance();
-                final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                final HashMap<String, Object> data = new HashMap<>();
-                data.put("chatId", id);
-
-                db.collection("chat_privado")
-                        .document(id)
-                        .get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                db.collection("users")
-                                        .document(user.getUid())
-                                        .collection("chats_privados")
-                                        .add(data);
-
-                                Map<String, Object> chatData = documentSnapshot.getData();
-                                String chatName = chatData.get("chatName").toString();
-                                Intent chatRoomIntent = new Intent(getActivity().getApplicationContext() , ChatRoomActivity.class );
-                                chatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
-                                        .putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
-                                        .putExtra(ChatRoomActivity.CHAT_ROOM_NAME,id);
-
-                                startActivity(chatRoomIntent);
-
-                                listener.PopFragment();
 
 
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                chatRoomId.setText("");
-                                errorMsg.setVisibility(View.VISIBLE);
-                            }
-                        });
+                if(!id.isEmpty()){
+                    final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    final HashMap<String, Object> data = new HashMap<>();
+                    data.put("chatId", id);
+                    db.collection("chat_privado")
+                            .document(id)
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Map<String, Object> chatData = documentSnapshot.getData();
+
+                                    if(chatData == null){
+                                        chatRoomId.setText("");
+                                        errorMsg.setVisibility(View.VISIBLE);
+                                        return;
+                                    }
+                                    db.collection("users")
+                                            .document(user.getUid())
+                                            .collection("chats_privados")
+                                            .add(data);
+
+                                    String chatName = chatData.get("chatName").toString();
+                                    Intent chatRoomIntent = new Intent(getActivity().getApplicationContext() , ChatRoomActivity.class );
+                                    chatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
+                                            .putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
+                                            .putExtra(ChatRoomActivity.CHAT_ROOM_NAME,id);
+
+                                    startActivity(chatRoomIntent);
+
+                                    listener.PopFragment();
+
+
+                                }
+                            });
+
+
+                }else{
+                    chatRoomId.setText("");
+                    errorMsg.setVisibility(View.VISIBLE);
+                }
 
 
             }
