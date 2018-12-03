@@ -27,8 +27,18 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="example"
-                    android:host="gizmos" >
+                <data android:scheme="firebasechatapp"
+                    android:host="invite" >
+                </data>
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https"
+                    android:host="chatapp-test-4e669.firebaseapp.com"
+                    android:pathPrefix="/invite"
+                    >
                 </data>
             </intent-filter>
         </activity>
