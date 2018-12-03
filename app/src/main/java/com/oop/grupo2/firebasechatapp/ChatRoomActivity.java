@@ -35,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.net.URI;
+import java.util.HashMap;
 
 public class ChatRoomActivity extends AppCompatActivity {
     // Constructor de la Vista de los Mensajes
@@ -80,6 +81,16 @@ public class ChatRoomActivity extends AppCompatActivity {
             tipoChat="chat_privado";
             chatRoomName= uri.getQueryParameter("id");
             Log.d("Nombre " , chatRoomName);
+            // Como se supone que el link es para que la gente se una a una sala de chat
+            HashMap<String, Object> data = new HashMap<String,Object>();
+            data.put("chatId",chatRoomName);
+            FirebaseFirestore.getInstance()
+                    .collection("users")
+                    .document(FirebaseAuth.getInstance()
+                            .getCurrentUser()
+                            .getUid())
+                    .collection("chats_privados")
+                    .add(data);
 
         }else{
             Bundle arg = getIntent().getExtras();
@@ -92,7 +103,8 @@ public class ChatRoomActivity extends AppCompatActivity {
         Log.d("Pre-Actionbar-Nombre",nombreChat);
         if(nombreChat != null) actionBar.setTitle(nombreChat);
 
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar()
+                .setDefaultDisplayHomeAsUpEnabled(true);
         submitButton = findViewById(R.id.submitMessage);
         submitButton.setEnabled(false);
         messageContent = findViewById(R.id.messageEditText);
