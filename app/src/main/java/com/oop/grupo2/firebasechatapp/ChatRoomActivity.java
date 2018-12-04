@@ -73,13 +73,18 @@ public class ChatRoomActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_room_layout);
-
+        if(chatRoomName == null && tipoChat == null && nombreChat == null){
+            Bundle arg = getIntent().getExtras();
+            chatRoomName = arg.getString(CHAT_ROOM_NAME);
+            tipoChat = arg.getString(TIPO_CHAT_ROOM);
+            nombreChat =  arg.getString(NOMBRE_DEL_CHAT);
+        }
 
         ActionBar actionBar = getSupportActionBar();
         Log.d("Pre-Actionbar-Nombre",nombreChat);
         if(nombreChat != null) actionBar.setTitle(nombreChat);
 
-        getSupportActionBar()
+        actionBar
                 .setDefaultDisplayHomeAsUpEnabled(true);
         submitButton = findViewById(R.id.submitMessage);
         submitButton.setEnabled(false);
