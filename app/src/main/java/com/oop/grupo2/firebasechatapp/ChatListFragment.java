@@ -38,9 +38,9 @@ import java.util.Map;
 public class ChatListFragment extends Fragment{
     public static String TIPO_DE_CHAT = "TIPO_DE_CHAT";
 
-    private ChatListAdapter adapter;
-    private ArrayList<ChatRoom> dataset;
-    private String tipoChat;
+    protected ChatListAdapter adapter;
+    protected ArrayList<ChatRoom> dataset;
+    protected String tipoChat;
     public ChatListFragment() {
         // Required empty public constructor
     }
@@ -58,121 +58,18 @@ public class ChatListFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
         RecyclerView recyclerView = view.findViewById(R.id.chatList);
         dataset = new ArrayList<ChatRoom>() ;
-        Bundle args = getArguments();
-        tipoChat = args.getString(TIPO_DE_CHAT);
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         adapter = new ChatListAdapter(dataset);
         //Se buscan cuales son las salas de chat
-       if(tipoChat.equals("chat_publico")){
-                   db.collection("chat_publico")
-                   .get()
-                   .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                       @Override
-                       public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                           //Se obtienen todas las salas de chat
-                           for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                               //Se obtiene el ultimo mensaje como un Map
-                               Map<String,Object> map = (HashMap)documentSnapshot.getData().get("last_message");
-                               Message msg = new Message(); // Se crea una instancia de un mensaje
-                               //Se asigna el Nombre del Usuario que lo Mando y El Mensaje como tal
-                               if(map != null){
-                                   msg.setUsername((String) map.get("nickname"));
-                                   msg.setMessage((String) map.get("message"));
-                               }
-                               // Se crea un objeto ChatRoom que contiene el "Id" del Chat y el Ultimo mensaje
-                               ChatRoom chat_room = new ChatRoom(documentSnapshot.getId(),documentSnapshot.getData().get("chatName").toString(),tipoChat,msg);
-                               // Como este ultimo mensaje puede cambiar tiene un listener actualizar los datos en caso de que se reciba un nuevo mensaje
-                               chat_room.addLastMessageUpdater(new UpdateMessage() {
-                                   @Override
-                                   public void onMessageUpdated(ChatRoom chatRoom) {
-                                       int oldIndex  = dataset.indexOf(chatRoom);
-                                       dataset.remove(oldIndex);
-                                       dataset.add(0,chatRoom);
-                                       adapter.notifyDataSetChanged();
-                                   }
-                               });
-                               // Se agrega al dataset
-                               dataset.add(chat_room);
-                           }
-                           //Se le notifica al adapter que se modificaron los cambios
-                           adapter.notifyDataSetChanged();
-                       }
-                   });
-       }else{
-           FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-            Query reference =  db.collection("users")
-                   .document(currentUser.getUid())
-                   .collection("chats_privados");
-            reference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                    if(e == null) return;
+           getData();
 
-                    for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                       Map<String, Object> map = (HashMap) documentSnapshot.getData();
-                       if(map == null && map.get("chatId") == null) return;
-                       fetchChatRoom(db,map.get("chatId").toString());
-
-                    }
-                }
-            });
-
-            reference.get()
-                   .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-               @Override
-               public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                   for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-
-                       Map<String, Object> data = (HashMap)documentSnapshot.getData();
-                       String id = data.get("chatId").toString();
-                       fetchChatRoom(db,id);
-
-                   }
-
-
-               }
-
-           });
-       }
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext() , 1));
 
     }
 
-    public void fetchChatRoom(FirebaseFirestore db , String id){
-        db.collection("chat_privado")
-                .document(id)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        final Map<String , Object> data =  (HashMap)documentSnapshot.getData();
-                        Map<String,Object> last_message = (HashMap)data.get("last_message");
-                        Message msg = new Message();
-                        if(last_message != null){
-                            msg.setUsername(last_message.get("nickname").toString());
-                            msg.setMessage(last_message.get("message").toString());
-                        }
-                        ChatRoom chatRoom = new ChatRoom(documentSnapshot.getId(), data.get("chatName").toString(),tipoChat ,msg);
 
-                        chatRoom.addLastMessageUpdater(new UpdateMessage() {
-                            @Override
-                            public void onMessageUpdated(ChatRoom chatRoom) {
-                                int oldIndex  = dataset.indexOf(chatRoom);
-                                dataset.remove(oldIndex);
-                                dataset.add(0,chatRoom);
-                                adapter.notifyDataSetChanged();
-                            }
-                        });
-                        // Se agrega al dataset
-                        dataset.add(chatRoom);
-                        adapter.notifyDataSetChanged();
+    public void getData(){
 
-                    }
-                });
     }
-
 }
