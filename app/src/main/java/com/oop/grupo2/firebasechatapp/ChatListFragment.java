@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -84,7 +85,10 @@ public class ChatListFragment extends Fragment{
                                // Como este ultimo mensaje puede cambiar tiene un listener actualizar los datos en caso de que se reciba un nuevo mensaje
                                chat_room.addLastMessageUpdater(new UpdateMessage() {
                                    @Override
-                                   public void onMessageUpdated() {
+                                   public void onMessageUpdated(ChatRoom chatRoom) {
+                                       int oldIndex  = dataset.indexOf(chatRoom);
+                                       dataset.remove(oldIndex);
+                                       dataset.add(0,chatRoom);
                                        adapter.notifyDataSetChanged();
                                    }
                                });
@@ -145,7 +149,7 @@ public class ChatListFragment extends Fragment{
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Map<String , Object> data =  (HashMap)documentSnapshot.getData();
+                        final Map<String , Object> data =  (HashMap)documentSnapshot.getData();
                         Map<String,Object> last_message = (HashMap)data.get("last_message");
                         Message msg = new Message();
                         if(last_message != null){
@@ -156,7 +160,10 @@ public class ChatListFragment extends Fragment{
 
                         chatRoom.addLastMessageUpdater(new UpdateMessage() {
                             @Override
-                            public void onMessageUpdated() {
+                            public void onMessageUpdated(ChatRoom chatRoom) {
+                                int oldIndex  = dataset.indexOf(chatRoom);
+                                dataset.remove(oldIndex);
+                                dataset.add(0,chatRoom);
                                 adapter.notifyDataSetChanged();
                             }
                         });
