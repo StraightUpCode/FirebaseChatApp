@@ -54,17 +54,6 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatRo
         String msg = room.getLast_message().notNull()? room.getLast_message().getNickname()+": " + room.getLast_message().getMessage() : "Nuevo Chat" ;
         holder.lastMsg.setText(msg);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent ChatRoomIntent = new Intent(context , ChatRoomActivity.class );
-                ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_NAME ,room.getChat_id() );
-                ChatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, room.getTipo_chat());
-                ChatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, room.getChatName());
-                context.startActivity(ChatRoomIntent);
-            }
-        });
-
         if(room.getTipo_chat().equals("chat_privado")){
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -74,6 +63,27 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatRo
             });
 
             holder.itemView.setLongClickable(true);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent ChatRoomIntent = new Intent(context , PrivateChatRoomActivity.class );
+                    ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_NAME ,room.getChat_id() );
+                    ChatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, room.getTipo_chat());
+                    ChatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, room.getChatName());
+                    context.startActivity(ChatRoomIntent);
+                }
+            });
+        }else{
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent ChatRoomIntent = new Intent(context , PublicChatRoomActivity.class );
+                    ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_NAME ,room.getChat_id() );
+                    ChatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, room.getTipo_chat());
+                    ChatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, room.getChatName());
+                    context.startActivity(ChatRoomIntent);
+                }
+            });
         }
 
     }
