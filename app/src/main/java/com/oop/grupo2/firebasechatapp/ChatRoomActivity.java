@@ -57,10 +57,10 @@ public class ChatRoomActivity extends AppCompatActivity {
     public static String TIPO_CHAT_ROOM = "TIPO_CHAT";
     public static String NOMBRE_DEL_CHAT = "NOMBRE_DEL_CHAT";
 
-    private String chatRoomName;
-    private String tipoChat;
-    private String nombreChat;
-    private User myUser;
+    protected String chatRoomName;
+    protected String tipoChat;
+    protected String nombreChat;
+    protected User myUser;
     private Button submitButton;
     private EditText messageContent;
     private RecyclerView messageRecyclerView;
@@ -73,31 +73,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_room_layout);
-        Uri uri = getIntent().getData();
-        if(uri != null ){
-            Log.d("URI",uri.toString());
-            nombreChat= Uri.decode(uri.getQueryParameter("chat"));
-            Log.d("ChatRoomName" , nombreChat);
-            tipoChat="chat_privado";
-            chatRoomName= uri.getQueryParameter("id");
-            Log.d("Nombre " , chatRoomName);
-            // Como se supone que el link es para que la gente se una a una sala de chat
-            HashMap<String, Object> data = new HashMap<String,Object>();
-            data.put("chatId",chatRoomName);
-            FirebaseFirestore.getInstance()
-                    .collection("users")
-                    .document(FirebaseAuth.getInstance()
-                            .getCurrentUser()
-                            .getUid())
-                    .collection("chats_privados")
-                    .add(data);
 
-        }else{
-            Bundle arg = getIntent().getExtras();
-            chatRoomName = arg.getString(CHAT_ROOM_NAME);
-            tipoChat = arg.getString(TIPO_CHAT_ROOM);
-            nombreChat =  arg.getString(NOMBRE_DEL_CHAT);
-        }
 
         ActionBar actionBar = getSupportActionBar();
         Log.d("Pre-Actionbar-Nombre",nombreChat);
@@ -193,7 +169,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
     }
-
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(tipoChat.equals("chat_privado")){
@@ -218,5 +194,5 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
