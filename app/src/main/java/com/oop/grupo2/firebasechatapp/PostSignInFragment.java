@@ -53,7 +53,7 @@ public class PostSignInFragment extends Fragment {
                                 @Override
                                 public void onSuccess(Void aVoid) {
                                     Toast.makeText(getContext(), "Nickname Ingresado Correctamente", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(getContext(), MainActivity.class));
+                                    startActivity(new Intent(getContext(), ChatRoomListActivity.class));
                                     listener.PopFragment();
 
                                 }
