@@ -88,7 +88,7 @@ public class CreatePrivateChat extends Fragment {
                 shareIntent.setType("text/plain");
                 startActivity(Intent.createChooser(shareIntent, "Invitar con: "));*/
 
-                    Intent chatRoomIntent = new Intent(getContext(),ChatRoomActivity.class);
+                    Intent chatRoomIntent = new Intent(getContext(),PrivateChatRoomActivity.class);
                     chatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
                             .putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
                             .putExtra(ChatRoomActivity.CHAT_ROOM_NAME, ref.getId());
