@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -79,13 +80,16 @@ public class ChatRoomActivity extends AppCompatActivity {
             tipoChat = arg.getString(TIPO_CHAT_ROOM);
             nombreChat =  arg.getString(NOMBRE_DEL_CHAT);
         }
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         Log.d("Pre-Actionbar-Nombre",nombreChat);
         if(nombreChat != null) actionBar.setTitle(nombreChat);
 
         actionBar
-                .setDefaultDisplayHomeAsUpEnabled(true);
+                .setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
         submitButton = findViewById(R.id.submitMessage);
         submitButton.setEnabled(false);
         messageContent = findViewById(R.id.messageEditText);
