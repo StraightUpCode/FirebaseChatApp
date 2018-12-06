@@ -6,4 +6,6 @@
     <string name="chatNamePlaceHolder">Chat Name</string>
     <string name="error_msg">Error: No puede tener un nombre vacio</string>
     <string name="join_error1">Error: No exite un ChatRoom con ese ID</string>
+    <string name="crear_sala_de_chat">Crear Sala de Chat</string>
+    <string name="crear">Crear</string>
 </resources>
