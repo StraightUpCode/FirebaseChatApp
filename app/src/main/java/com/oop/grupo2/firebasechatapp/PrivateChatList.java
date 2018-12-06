@@ -44,8 +44,8 @@ public class PrivateChatList extends ChatListFragment {
                 if(e == null) return;
 
                 for(QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                    Map<String, Object> map = (HashMap) documentSnapshot.getData();
-                    if(map == null && map.get("chatId") == null) return;
+                    Map<String, Object> map =  documentSnapshot.getData();
+                    if(map == null && map.get("chatId") == null) adapter.notifyDataSetChanged();
                     fetchChatRoom(db,map.get("chatId").toString());
 
                 }
