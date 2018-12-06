@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ChatRoomListActivity extends AppCompatActivity {
 
@@ -17,7 +18,8 @@ public class ChatRoomListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if( FirebaseAuth.getInstance().getCurrentUser() == null) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if( user == null) {
             startActivity(new Intent(this, SignInActivity.class));
             finish();
         }
