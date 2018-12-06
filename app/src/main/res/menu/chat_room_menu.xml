@@ -2,4 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="Compartir Chat Room"
         android:id="@+id/share_chat_room"></item>
+    <item android:title="Abandonar Grupo"
+        android:id="@+id/leaveChat">
+
+    </item>
 </menu>

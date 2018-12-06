@@ -178,30 +178,5 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
     }
-    /*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if(tipoChat.equals("chat_privado")){
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.chat_room_menu, menu);
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            default: {
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                //https://chatapp-test-4e669.firebaseapp.com/invite?chat=Los Pibes&id=yqg0mbyR2nUIpLMYqCds
-                String url = "https://chatapp-test-4e669.firebaseapp.com/invite?chat="+Uri.encode(nombreChat)+"&id="+chatRoomName;
-                shareIntent.putExtra(Intent.EXTRA_TEXT , "Unete a mi chat privado en Firebase Chat App : "+ url );
-                shareIntent.putExtra(Intent.EXTRA_TITLE,"Chat Invite");
-                shareIntent.setType("text/plain");
-                startActivity(Intent.createChooser(shareIntent, "Invitar con: "));
-
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 }
