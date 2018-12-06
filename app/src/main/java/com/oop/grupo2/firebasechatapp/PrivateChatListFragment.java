@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -44,24 +45,8 @@ public class PrivateChatListFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
-                Fragment fragment = new PopNewPrivateChat();
-                ((PopNewPrivateChat) fragment).setupPop(new FragmentPoper() {
-                    @Override
-                    public void PopFragment() {
-                        myFragmentManager.popBackStackImmediate();
-                    }
-                });
-                myFragmentManager.beginTransaction()
-                        .add(R.id.frame_holder, fragment,"popup")
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myFragmentManager.popBackStack();
+                DialogFragment popup = new CreatePrivateChat();
+                popup.show(myFragmentManager,"popup");
             }
         });
     }
