@@ -1,11 +1,11 @@
 package com.oop.grupo2.firebasechatapp;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,16 +22,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class CreatePrivateChat extends Fragment {
+
+public class CreatePrivateChat extends DialogFragment {
 
     private EditText nombre;
     private Button submit;
     private TextView errormsg;
 
-    public FragmentPoper listener;
     public CreatePrivateChat() {
         // Required empty public constructor
     }
@@ -50,8 +47,6 @@ public class CreatePrivateChat extends Fragment {
         submit = view.findViewById(R.id.chatCreate);
         nombre = view.findViewById(R.id.chatNameInput);
         errormsg = view.findViewById(R.id.private_chat_erro);
-        final View _view = view;
-
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +89,6 @@ public class CreatePrivateChat extends Fragment {
                             .putExtra(ChatRoomActivity.CHAT_ROOM_NAME, ref.getId());
 
                     startActivity(chatRoomIntent);
-                    listener.PopFragment();
                 }else{
                     errormsg.setVisibility(View.VISIBLE);
                     nombre.setText("");
@@ -105,7 +99,4 @@ public class CreatePrivateChat extends Fragment {
 
     }
 
-    public void setFragmentPopperListener(FragmentPoper popper){
-        listener = popper;
-    }
 }
