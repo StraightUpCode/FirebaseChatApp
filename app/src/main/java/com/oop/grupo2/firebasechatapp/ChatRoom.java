@@ -1,11 +1,11 @@
 package com.oop.grupo2.firebasechatapp;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.annotation.Nullable;
@@ -47,9 +47,10 @@ public class ChatRoom {
                                 if(content == null ) return;
                                 newMessage.setMessage(content.get("message").toString());
                                 newMessage.setUsername(content.get("nickname").toString());
-                                if(newMessage.notNull()){
+                                newMessage.setDatetime((Date) content.get("datetime"));
+                                if(newMessage.notNull() && last_message != null &&!last_message.isEqual(newMessage)){
                                     last_message = newMessage;
-                                    listener.onMessageUpdated(ChatRoom.this);
+                                    listener.onMessageUpdated(ChatRoom.this, last_message);
                                 }
 
 

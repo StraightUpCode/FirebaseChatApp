@@ -68,4 +68,15 @@ public class Message {
     public boolean notNull(){
         return  ! (message== null && nickname == null);
     }
+
+    @Override
+    public String toString() {
+
+        return this.notNull() ? nickname + " : " + message : "Chat Nuevo!" ;
+    }
+    public boolean isEqual(Message msg ){
+        return nickname.equals(msg.nickname)
+                && message.equals(msg.message)
+                && datetime.equals(msg.datetime);
+    }
 }

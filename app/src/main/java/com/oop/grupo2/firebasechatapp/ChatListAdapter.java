@@ -3,6 +3,7 @@ package com.oop.grupo2.firebasechatapp;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -28,6 +29,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatRo
     }
 
     ArrayList<ChatRoom> dataset;
+    private Context context;
     ChatListAdapter(ArrayList<ChatRoom> data){
         dataset = data;
     }
@@ -35,8 +37,9 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatRo
     @Override
     public ChatListAdapter.ChatRoomHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //Genera la Vista del Elemento
+        context = parent.getContext();
         return new ChatRoomHolder(
-                LayoutInflater.from(parent.getContext())
+                LayoutInflater.from(context)
                         .inflate(R.layout.chat_room_element, parent , false));
     }
 
@@ -55,14 +58,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatRo
         holder.lastMsg.setText(msg);
 
         if(room.getTipo_chat().equals("chat_privado")){
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return false;
-                }
-            });
 
-            holder.itemView.setLongClickable(true);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

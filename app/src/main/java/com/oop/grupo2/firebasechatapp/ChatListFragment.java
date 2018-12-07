@@ -1,6 +1,9 @@
 package com.oop.grupo2.firebasechatapp;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.support.v4.content.ContextCompat.getSystemService;
 
 
 /**
@@ -72,4 +77,6 @@ public class ChatListFragment extends Fragment{
     public void getData(){
 
     }
+
+
 }

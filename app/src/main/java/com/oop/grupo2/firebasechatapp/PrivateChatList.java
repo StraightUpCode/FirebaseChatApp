@@ -3,6 +3,8 @@ package com.oop.grupo2.firebasechatapp;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.view.View;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,6 +18,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,16 +83,31 @@ public class PrivateChatList extends ChatListFragment {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         final Map<String , Object> data =  (HashMap)documentSnapshot.getData();
                         Map<String,Object> last_message = (HashMap)data.get("last_message");
-                        Message msg = new Message();
+                        final  Message msg = new Message();
                         if(last_message != null){
                             msg.setUsername(last_message.get("nickname").toString());
                             msg.setMessage(last_message.get("message").toString());
+                            msg.setDatetime((Date) last_message.get("datetime"));
+
                         }
                         ChatRoom chatRoom = new ChatRoom(documentSnapshot.getId(), data.get("chatName").toString(),"chat_privado" ,msg);
 
                         chatRoom.addLastMessageUpdater(new UpdateMessage() {
                             @Override
-                            public void onMessageUpdated(ChatRoom chatRoom) {
+                            public void onMessageUpdated(ChatRoom chatRoom, Message last_message) {
+                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity(), "firebase_notificacion")
+                                        .setSmallIcon(R.mipmap.ic_launcher_round)
+                                        .setContentTitle(chatRoom.getChatName())
+                                        .setContentText(last_message.toString())
+                                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                        .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                                        .setAutoCancel(true);
+
+                                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+// notificationId is a unique int for each notification that you must define
+                                int notificationId = 100;
+                                notificationManager.notify(chatRoom.getChat_id(),notificationId, mBuilder.build());
+
                                 int oldIndex  = dataset.indexOf(chatRoom);
                                 dataset.remove(oldIndex);
                                 dataset.add(0,chatRoom);
