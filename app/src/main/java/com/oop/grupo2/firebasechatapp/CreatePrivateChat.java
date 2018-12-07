@@ -67,21 +67,6 @@ public class CreatePrivateChat extends DialogFragment {
                             .document(user.getUid())
                             .collection("chats_privados")
                             .add(userChat);
-                /*
-                Copia el ID del chat al Clipboard para hacer copy paste
-                android.content.ClipboardManager cm = (android.content.ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                android.content.ClipData clip =  android.content.ClipData
-                        .newPlainText("Chat Id", ref.getId());
-                cm.setPrimaryClip(clip);
-                */
-
-                    // Compartir por chat
-                /*
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT , "Copia el Siguiente Valor para unirte a mi Chat Privado en FirebaseChatApp : "+ref.getId());
-                shareIntent.putExtra(Intent.EXTRA_TITLE,"Chat Invite");
-                shareIntent.setType("text/plain");
-                startActivity(Intent.createChooser(shareIntent, "Invitar con: "));*/
 
                     Intent chatRoomIntent = new Intent(getContext(),PrivateChatRoomActivity.class);
                     chatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
