@@ -72,7 +72,7 @@ public class CreatePrivateChat extends DialogFragment {
                     chatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
                             .putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
                             .putExtra(ChatRoomActivity.CHAT_ROOM_NAME, ref.getId());
-
+                    dismiss();
                     startActivity(chatRoomIntent);
                 }else{
                     errormsg.setVisibility(View.VISIBLE);
