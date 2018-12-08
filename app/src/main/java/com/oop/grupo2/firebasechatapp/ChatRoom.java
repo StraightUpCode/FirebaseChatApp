@@ -48,7 +48,7 @@ public class ChatRoom {
                                 newMessage.setMessage(content.get("message").toString());
                                 newMessage.setUsername(content.get("nickname").toString());
                                 newMessage.setDatetime((Date) content.get("datetime"));
-                                if(newMessage.notNull() && last_message != null &&!last_message.isEqual(newMessage)){
+                                if(newMessage.notNull() && last_message.notNull() &&!last_message.isEqual(newMessage)){
                                     last_message = newMessage;
                                     listener.onMessageUpdated(ChatRoom.this, last_message);
                                 }

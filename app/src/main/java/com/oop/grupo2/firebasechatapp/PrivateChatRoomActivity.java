@@ -45,7 +45,7 @@ public class PrivateChatRoomActivity extends ChatRoomActivity implements ExitCha
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             Map<String,Object> response = documentSnapshot.getData();
-                            if(response.get("chatId") == null) return;
+                            if(response == null && response.get("chatId") == null ) return;
                             if(! response.get("chatId").toString().equals(chatRoomName)){
                                 HashMap<String, Object> data = new HashMap<String,Object>();
                                 data.put("chatId",chatRoomName);

@@ -21,6 +21,7 @@ public class PublicChatList extends ChatListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -54,7 +55,7 @@ public class PublicChatList extends ChatListFragment {
                             chat_room.addLastMessageUpdater(new UpdateMessage() {
                                 @Override
                                 public void onMessageUpdated(ChatRoom chatRoom, Message last_message) {
-                                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity(), "firebase_notificacion")
+                                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity().getApplicationContext(), "firebase_notificacion")
                                             .setSmallIcon(R.mipmap.ic_launcher_round)
                                             .setContentTitle(chat_room.getChatName())
                                             .setContentText(last_message.toString())
