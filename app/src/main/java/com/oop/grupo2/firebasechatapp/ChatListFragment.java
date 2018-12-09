@@ -46,6 +46,8 @@ public class ChatListFragment extends Fragment{
     protected ChatListAdapter adapter;
     protected ArrayList<ChatRoom> dataset;
     protected String tipoChat;
+    FirebaseUser user;
+
     public ChatListFragment() {
         // Required empty public constructor
     }
@@ -55,6 +57,7 @@ public class ChatListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        user = FirebaseAuth.getInstance().getCurrentUser();
         return inflater.inflate(R.layout.fragment_chat_list, container, false);
     }
 

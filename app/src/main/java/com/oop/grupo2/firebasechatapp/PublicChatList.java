@@ -1,6 +1,7 @@
 package com.oop.grupo2.firebasechatapp;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -18,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PublicChatList extends ChatListFragment {
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +31,13 @@ public class PublicChatList extends ChatListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
+
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
     }
 
     @Override
@@ -55,7 +66,7 @@ public class PublicChatList extends ChatListFragment {
                             chat_room.addLastMessageUpdater(new UpdateMessage() {
                                 @Override
                                 public void onMessageUpdated(ChatRoom chatRoom, Message last_message) {
-                                    if(getActivity().getApplicationContext() != null){
+                                    if(getActivity().getApplicationContext() != null && last_message.getuID() == user.getUid() ){
                                         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity().getApplicationContext(), "firebase_notificacion")
                                                 .setSmallIcon(R.mipmap.ic_launcher_round)
                                                 .setContentTitle(chat_room.getChatName())
