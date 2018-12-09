@@ -30,6 +30,7 @@ public class ChatRoomListActivity extends AppCompatActivity {
     private FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         user = FirebaseAuth.getInstance().getCurrentUser();
         this.createNotificationChannel(this);
