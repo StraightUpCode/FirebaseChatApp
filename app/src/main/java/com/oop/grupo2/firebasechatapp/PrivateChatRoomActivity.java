@@ -3,6 +3,7 @@ package com.oop.grupo2.firebasechatapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
@@ -12,11 +13,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,27 +43,36 @@ public class PrivateChatRoomActivity extends ChatRoomActivity implements ExitCha
             Log.d("Nombre " , chatRoomName);
             // Como se supone que el link es para que la gente se una a una sala de chat
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("users")
+            Query ref = db.collection("users")
                     .document(user.getUid())
-                    .collection("chats_privados")
-                    .document(chatRoomName)
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    .collection("chats_privados");
+
+            ref
+            .whereEqualTo("chatId",chatRoomName)
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Map<String,Object> response = documentSnapshot.getData();
-                            if(response == null && response.get("chatId") == null ) return;
-                            if(! response.get("chatId").toString().equals(chatRoomName)){
-                                HashMap<String, Object> data = new HashMap<String,Object>();
-                                data.put("chatId",chatRoomName);
-                                db
-                                .collection("users")
-                                .document(user.getUid())
-                                .collection("chats_privados")
-                                .add(data);
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if(task.getResult() == null){
+
+
+                                }
+                                QuerySnapshot querySnapshot = task.getResult();
+                                if(querySnapshot.isEmpty()){
+                                    HashMap<String,Object> data = new HashMap<>();
+                                    data.put("chatId", chatRoomName);
+                                    db.collection("users")
+                                            .document(user.getUid())
+                                            .collection("chats_privados")
+                                            .add(data);
+                                }
+
+
                             }
                         }
                     });
+
 
 
         }

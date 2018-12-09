@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 ext.minimumSdkVersion = 16
 ext.versionMajor = 1
 ext.versionMinor = 3
-ext.versionPatch = 2
+ext.versionPatch = 3
 ext.versionClassifier = "ALPHA"
 ext.isSnapshot = null
 
@@ -51,6 +51,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.5'
     implementation 'com.google.firebase:firebase-firestore:17.1.2'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+
     implementation 'com.firebaseui:firebase-ui-firestore:4.2.1'
     implementation 'com.firebaseui:firebase-ui-auth:4.1.0'
     implementation 'com.android.support:multidex:1.0.3'
