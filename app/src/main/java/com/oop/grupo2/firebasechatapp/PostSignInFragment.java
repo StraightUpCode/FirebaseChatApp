@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,10 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
-public class PostSignInFragment extends Fragment {
+public class PostSignInFragment extends DialogFragment {
     EditText nicknameField;
     FirebaseFirestore db;
-    FragmentPoper listener;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -38,35 +39,28 @@ public class PostSignInFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         db = FirebaseFirestore.getInstance();
         nicknameField = view.findViewById(R.id.nickname_id);
-        nicknameField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        Button button = view.findViewById(R.id.buttonNickName);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
-                    String nickname = v.getText().toString();
-                    String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    HashMap<String, Object> data = new HashMap<>();
-                    data.put("nickname", nickname);
-                    db.collection("users")
-                            .document(currentUserId)
-                            .set(data)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(getContext(), "Nickname Ingresado Correctamente", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(getContext(), ChatRoomListActivity.class));
-                                    listener.PopFragment();
+            public void onClick(View v) {
+                String nickname = nicknameField.getText().toString();
+                String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("nickname", nickname);
+                db.collection("users")
+                        .document(currentUserId)
+                        .set(data)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getContext(), "Nickname Ingresado Correctamente", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getContext(), ChatRoomListActivity.class));
 
-                                }
-                            });
-                }
-
-                return false;
+                            }
+                        });
             }
         });
 
     }
 
-    public void setListener(FragmentPoper listener) {
-        this.listener = listener;
-    }
 }
