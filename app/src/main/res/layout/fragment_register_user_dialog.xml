@@ -16,14 +16,14 @@
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:layout_width="0dp"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:gravity="center_vertical"
             android:paddingLeft="16dp"
+            android:gravity="center_vertical"
+            android:background="@color/colorPrimary"
             android:textColor="@color/cardview_light_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/register_user" />
+            android:text="@string/register_user" />
 
         <EditText
             android:id="@+id/emailField"
