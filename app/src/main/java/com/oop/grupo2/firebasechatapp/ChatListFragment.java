@@ -3,6 +3,7 @@ package com.oop.grupo2.firebasechatapp;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,6 +48,8 @@ public class ChatListFragment extends Fragment{
     protected ArrayList<ChatRoom> dataset;
     protected String tipoChat;
     FirebaseUser user;
+    Context ctx;
+
 
     public ChatListFragment() {
         // Required empty public constructor
@@ -57,6 +60,7 @@ public class ChatListFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        ctx = getActivity();
         user = FirebaseAuth.getInstance().getCurrentUser();
         return inflater.inflate(R.layout.fragment_chat_list, container, false);
     }

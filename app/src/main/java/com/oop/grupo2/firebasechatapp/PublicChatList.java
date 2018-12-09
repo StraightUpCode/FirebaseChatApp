@@ -1,5 +1,6 @@
 package com.oop.grupo2.firebasechatapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,6 +39,7 @@ public class PublicChatList extends ChatListFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
     }
 
     @Override
@@ -66,8 +68,8 @@ public class PublicChatList extends ChatListFragment {
                             chat_room.addLastMessageUpdater(new UpdateMessage() {
                                 @Override
                                 public void onMessageUpdated(ChatRoom chatRoom, Message last_message) {
-                                    if(getActivity().getApplicationContext() != null && last_message.getuID() == user.getUid() ){
-                                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getActivity().getApplicationContext(), "firebase_notificacion")
+                                    if( ctx != null && last_message.getuID() != user.getUid() ){
+                                        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ctx, "firebase_notificacion")
                                                 .setSmallIcon(R.mipmap.ic_launcher_round)
                                                 .setContentTitle(chat_room.getChatName())
                                                 .setContentText(last_message.toString())
@@ -78,6 +80,8 @@ public class PublicChatList extends ChatListFragment {
 // notificationId is a unique int for each notification that you must define
                                         int notificationId = 100;
                                         notificationManager.notify(chatRoom.getChat_id(),notificationId, mBuilder.build());
+                                    }else {
+                                        ctx = getActivity();
                                     }
                                     int oldIndex  = dataset.indexOf(chatRoom);
                                     dataset.remove(oldIndex);

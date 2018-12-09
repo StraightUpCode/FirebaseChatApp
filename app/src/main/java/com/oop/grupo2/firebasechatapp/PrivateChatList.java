@@ -96,8 +96,8 @@ public class PrivateChatList extends ChatListFragment {
                             @Override
                             public void onMessageUpdated(ChatRoom chatRoom, Message last_message) {
 
-                            if(getActivity().getApplicationContext() != null && last_message.getuID() != user.getUid() ) {
-                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder( getActivity().getApplicationContext(), "firebase_notificacion")
+                            if(ctx!= null && last_message.getuID() != user.getUid() ) {
+                                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder( ctx, "firebase_notificacion")
                                         .setSmallIcon(R.mipmap.ic_launcher_round)
                                         .setContentTitle(chatRoom.getChatName())
                                         .setContentText(last_message.toString())
