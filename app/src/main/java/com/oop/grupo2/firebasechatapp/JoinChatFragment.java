@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -87,7 +86,7 @@ public class JoinChatFragment extends Fragment {
                                     Intent chatRoomIntent = new Intent(getActivity().getApplicationContext() , ChatRoomActivity.class );
                                     chatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
                                             .putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
-                                            .putExtra(ChatRoomActivity.CHAT_ROOM_NAME,id);
+                                            .putExtra(ChatRoomActivity.CHAT_ROOM_ID,id);
 
                                     startActivity(chatRoomIntent);
 

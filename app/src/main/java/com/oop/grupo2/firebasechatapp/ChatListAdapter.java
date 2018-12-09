@@ -3,11 +3,8 @@ package com.oop.grupo2.firebasechatapp;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -63,7 +60,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatRo
                 @Override
                 public void onClick(View v) {
                     Intent ChatRoomIntent = new Intent(context , PrivateChatRoomActivity.class );
-                    ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_NAME ,room.getChat_id() );
+                    ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_ID,room.getChat_id() );
                     ChatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, room.getTipo_chat());
                     ChatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, room.getChatName());
                     context.startActivity(ChatRoomIntent);
@@ -74,7 +71,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatRo
                 @Override
                 public void onClick(View v) {
                     Intent ChatRoomIntent = new Intent(context , PublicChatRoomActivity.class );
-                    ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_NAME ,room.getChat_id() );
+                    ChatRoomIntent.putExtra(ChatRoomActivity.CHAT_ROOM_ID,room.getChat_id() );
                     ChatRoomIntent.putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, room.getTipo_chat());
                     ChatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, room.getChatName());
                     context.startActivity(ChatRoomIntent);

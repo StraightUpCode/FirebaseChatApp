@@ -1,13 +1,8 @@
 package com.oop.grupo2.firebasechatapp;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -16,9 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,16 +19,10 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
-import java.net.URI;
-import java.util.HashMap;
 
 public class ChatRoomActivity extends AppCompatActivity {
     // Constructor de la Vista de los Mensajes
@@ -54,11 +40,11 @@ public class ChatRoomActivity extends AppCompatActivity {
     }
 
     // Inicio de la Clase ChatRoomFragment
-    public static String CHAT_ROOM_NAME = "CHAT_ROOM_NAME";
+    public static String CHAT_ROOM_ID = "CHAT_ROOM_ID";
     public static String TIPO_CHAT_ROOM = "TIPO_CHAT";
     public static String NOMBRE_DEL_CHAT = "NOMBRE_DEL_CHAT";
 
-    protected String chatRoomName;
+    protected String chatRoonID;
     protected String tipoChat;
     protected String nombreChat;
     protected User myUser;
@@ -74,9 +60,9 @@ public class ChatRoomActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_room_layout);
-        if(chatRoomName == null && tipoChat == null && nombreChat == null){
+        if(chatRoonID == null && tipoChat == null && nombreChat == null){
             Bundle arg = getIntent().getExtras();
-            chatRoomName = arg.getString(CHAT_ROOM_NAME);
+            chatRoonID = arg.getString(CHAT_ROOM_ID);
             tipoChat = arg.getString(TIPO_CHAT_ROOM);
             nombreChat =  arg.getString(NOMBRE_DEL_CHAT);
         }
@@ -110,7 +96,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         messageRecyclerView.setLayoutManager(mLayoutManager);
 
         Query query = this.db.collection(tipoChat)
-                .document(chatRoomName)
+                .document(chatRoonID)
                 .collection("chat_msg")
                 .orderBy("datetime", Query.Direction.ASCENDING);
 
@@ -170,7 +156,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 if(! msg_message.isEmpty()){
                     Message msg = new Message(myUser.userId, myUser.userName, msg_message);
                     db.collection(tipoChat)
-                            .document(chatRoomName)
+                            .document(chatRoonID)
                             .collection("chat_msg")
                             .add(msg);
                     messageContent.setText("");

@@ -14,19 +14,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class PrivateChatRoomActivity extends ChatRoomActivity implements ExitChatDialog.DeleteChatInterface{
     FirebaseUser user;
@@ -39,8 +34,8 @@ public class PrivateChatRoomActivity extends ChatRoomActivity implements ExitCha
             nombreChat= Uri.decode(uri.getQueryParameter("chat"));
             Log.d("ChatRoomName" , nombreChat);
             tipoChat="chat_privado";
-            chatRoomName= uri.getQueryParameter("id");
-            Log.d("Nombre " , chatRoomName);
+            chatRoonID = uri.getQueryParameter("id");
+            Log.d("Nombre " , chatRoonID);
             // Como se supone que el link es para que la gente se una a una sala de chat
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
             Query ref = db.collection("users")
@@ -48,7 +43,7 @@ public class PrivateChatRoomActivity extends ChatRoomActivity implements ExitCha
                     .collection("chats_privados");
 
             ref
-            .whereEqualTo("chatId",chatRoomName)
+            .whereEqualTo("chatId", chatRoonID)
             .get()
             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -61,7 +56,7 @@ public class PrivateChatRoomActivity extends ChatRoomActivity implements ExitCha
                                 QuerySnapshot querySnapshot = task.getResult();
                                 if(querySnapshot.isEmpty()){
                                     HashMap<String,Object> data = new HashMap<>();
-                                    data.put("chatId", chatRoomName);
+                                    data.put("chatId", chatRoonID);
                                     db.collection("users")
                                             .document(user.getUid())
                                             .collection("chats_privados")
@@ -92,7 +87,7 @@ public class PrivateChatRoomActivity extends ChatRoomActivity implements ExitCha
             case R.id.share_chat_room: {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 //https://chatapp-test-4e669.firebaseapp.com/invite?chat=Los Pibes&id=yqg0mbyR2nUIpLMYqCds
-                String url = "https://chatapp-test-4e669.firebaseapp.com/invite?chat="+Uri.encode(nombreChat)+"&id="+chatRoomName;
+                String url = "https://chatapp-test-4e669.firebaseapp.com/invite?chat="+Uri.encode(nombreChat)+"&id="+ chatRoonID;
                 shareIntent.putExtra(Intent.EXTRA_TEXT , "Unete a mi chat privado en Firebase Chat App : "+ url );
                 shareIntent.putExtra(Intent.EXTRA_TITLE,"Chat Invite");
                 shareIntent.setType("text/plain");
@@ -101,7 +96,7 @@ public class PrivateChatRoomActivity extends ChatRoomActivity implements ExitCha
             }
             case R.id.leaveChat : {
                 DialogFragment newFragment = new ExitChatDialog();
-                ((ExitChatDialog) newFragment).addChatId(chatRoomName)
+                ((ExitChatDialog) newFragment).addChatId(chatRoonID)
                         .addUserId(user.getUid())
                         .addDeleteListerner(this);
                 newFragment.show(getSupportFragmentManager(),"Exit");

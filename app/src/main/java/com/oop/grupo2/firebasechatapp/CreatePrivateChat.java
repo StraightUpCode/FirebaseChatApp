@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +70,7 @@ public class CreatePrivateChat extends DialogFragment {
                     Intent chatRoomIntent = new Intent(getContext(),PrivateChatRoomActivity.class);
                     chatRoomIntent.putExtra(ChatRoomActivity.NOMBRE_DEL_CHAT, chatName)
                             .putExtra(ChatRoomActivity.TIPO_CHAT_ROOM, "chat_privado")
-                            .putExtra(ChatRoomActivity.CHAT_ROOM_NAME, ref.getId());
+                            .putExtra(ChatRoomActivity.CHAT_ROOM_ID, ref.getId());
                     dismiss();
                     startActivity(chatRoomIntent);
                 }else{
