@@ -95,8 +95,10 @@ public class PrivateChatList extends ChatListFragment {
                         chatRoom.addLastMessageUpdater(new UpdateMessage() {
                             @Override
                             public void onMessageUpdated(ChatRoom chatRoom, Message last_message) {
+                                String messageId = last_message.getuID();
+                                String userId = user.getUid();
 
-                            if(ctx!= null && last_message.getuID() != user.getUid() ) {
+                            if(ctx!= null && messageId.equals(userId) ) {
                                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder( ctx, "firebase_notificacion")
                                         .setSmallIcon(R.mipmap.ic_launcher_round)
                                         .setContentTitle(chatRoom.getChatName())
@@ -105,7 +107,7 @@ public class PrivateChatList extends ChatListFragment {
                                         .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                                         .setAutoCancel(true);
 
-                                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+                                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(ctx);
 // notificationId is a unique int for each notification that you must define
                                 int notificationId = 100;
                                 notificationManager.notify(chatRoom.getChat_id(),notificationId, mBuilder.build());
