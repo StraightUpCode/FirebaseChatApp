@@ -10,9 +10,9 @@
         android:roundIcon="@mipmap/new_icon_foreground"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".SignInActivity" />
-        <activity android:name=".ChatRoomListActivity"
+        <activity
+            android:name=".ChatRoomListActivity"
             android:theme="@style/AppTheme.splashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,43 +20,55 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-     <!--   <activity android:name=".ChatRoomActivity"
+        <!--
+        <activity android:name=".ChatRoomActivity"
             android:parentActivityName=".ChatRoomListActivity">
             <meta-data  android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ChatRoomListActivity"></meta-data>
 
-        </activity> -->
-        <activity android:name=".PrivateChatRoomActivity"
+        </activity>
+        -->
+        <activity
+            android:name=".PrivateChatRoomActivity"
             android:parentActivityName=".ChatRoomListActivity">
-            <meta-data  android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ChatRoomListActivity"></meta-data>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChatRoomListActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="firebasechatapp"
-                    android:host="invite" >
-                </data>
+
+                <data
+                    android:host="invite"
+                    android:scheme="firebasechatapp"></data>
             </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https"
+
+                <data
                     android:host="chatapp-test-4e669.firebaseapp.com"
                     android:pathPrefix="/invite"
-                    >
-                </data>
+                    android:scheme="https"></data>
             </intent-filter>
         </activity>
-        <activity android:name=".PublicChatRoomActivity"
+        <activity
+            android:name=".PublicChatRoomActivity"
             android:parentActivityName=".ChatRoomListActivity">
-            <meta-data  android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ChatRoomListActivity"></meta-data>
-
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChatRoomListActivity" />
         </activity>
-
-
+        <activity android:name=".AcercadeNosotros">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChatRoomListActivity" />
+        </activity>
     </application>
 
 </manifest>

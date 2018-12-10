@@ -4,6 +4,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -73,6 +74,25 @@ public class ChatRoomListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.sign_out){
             signOut();
+        }
+        switch (item.getItemId()){
+            case R.id.sign_out : {
+                signOut();
+                break;
+            }
+            case R.id.acerca_nostros : {
+                Intent goToAcercadeNosotros = new Intent(this,AcercadeNosotros.class);
+                startActivity(goToAcercadeNosotros);
+                break;
+            }
+            case R.id.compartir_app : {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                String url = "https://chatapp-test-4e669.firebaseapp.com/download";
+                shareIntent.putExtra(Intent.EXTRA_TEXT , "Descarga la App en: "+ url );
+                shareIntent.putExtra(Intent.EXTRA_TITLE,"Proba esta app");
+                shareIntent.setType("text/plain");
+                startActivity(Intent.createChooser(shareIntent, "Invitar con: "));
+            }
         }
         return super.onOptionsItemSelected(item);
     }

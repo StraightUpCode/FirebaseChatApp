@@ -18,5 +18,14 @@
     <string name="iniciar_sesion">Iniciar Sesion</string>
     <string name="correo">Correo</string>
     <string name="contrase_a">Contraseña</string>
+    <string name="acerda_de_nostros">Acerda de Nostros</string>
+    <string name="compartir_con_amigos">Compartir con Amigos</string>
+    <string name="cerrar_sesion">Cerrar Sesion</string>
+    <string name="descripcionGrupo">Somo un grupo de estudiantes de Ing. en Sistemas y Gerencia Informatica de la Universidad Americana UAM</string>
+    <string name="integrantes">Integrantes :</string>
+    <string name="roberto_oscar_s_nchez_saravia">Roberto Oscar Sánchez Saravia</string>
+    <string name="saramelia_balladares">Saramelia Balladares</string>
+    <string name="gheytner_echegoyen">Gheytner Ethyamil Echegoyen Gomez</string>
+    <string name="luigi_potoy">Luigi Alexander Potoy Espinoza</string>
 
 </resources>
